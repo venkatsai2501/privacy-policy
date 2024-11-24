@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Policy Tracker</title>
+    {% load static %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        /* Background and font styling */
+        body {
+            background-image: url('https://source.unsplash.com/1600x900/?cybersecurity,privacy');
+            background-size: cover;
+            background-position: center;
+            font-family: Arial, sans-serif;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        /* Container styling for the login box */
+        .login-container {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 40px 30px;
+            width: 100%;
+            max-width: 400px;
+            border-radius: 10px;
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.25);
+            text-align: center;
+        }
+        /* Title styling */
+        .login-container h2 {
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+        /* Input field styling */
+        .login-container input[type="text"],
+        .login-container input[type="password"] {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            width: 100%;
+            font-size: 1rem;
+        }
+        /* Button styling */
+        .btn-custom {
+            background-color: #007bff;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 500;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .btn-custom:hover {
+            background-color: #0056b3;
+        }
+        /* Link styling */
+        .signup-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .signup-link:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Welcome Back to Policy Tracker</h2>
+        <p>Log in to your account to track and analyze privacy policies</p>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-custom mt-3">Login</button>
+        </form>
+        <p class="mt-3">Don't have an account? <a href="{% url 'signup' %}" class="signup-link">Sign up</a></p>
+    </div>
+</body>
+</html>

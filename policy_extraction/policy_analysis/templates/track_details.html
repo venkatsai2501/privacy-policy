@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Details</title>
+</head>
+<body>
+    <h1>History for {{ tracked_site.url }}</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Last Checked</th>
+                <th>Last Updated</th>
+                <th>Summary</th>
+                <th>Similarity Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in history %}
+            <tr>
+                <td>{{ record.date_checked }}</td>
+                <td>{{ record.last_updated }}</td>
+                <td>{{ record.summary }}</td>
+                <td>{{ record.similarity_score }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'tracked_sites' %}">Back to Tracked Sites</a>
+</body>
+</html>

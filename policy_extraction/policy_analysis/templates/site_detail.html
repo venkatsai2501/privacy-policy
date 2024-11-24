@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}Site Detail - Policy Tracker{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center">Site Details</h1>
+    <!-- Back to Dashboard -->
+    <a href="{% url 'dashboard' %}" class="btn btn-primary mt-4">Back to Dashboard</a>
+    
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{{ site.title }}</h5>
+            <p class="card-text"><strong>URL:</strong> {{ site.url }}</p>
+
+            <!-- Actions -->
+            <div class="actions mt-3">
+                <a href="{% url 'scan_url' site.id %}" class="btn btn-secondary">Scan for Changes</a>
+                <a href="{% url 'edit_url' site.id %}" class="btn btn-warning">Edit</a>
+                <a href="{% url 'delete_url' site.id %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this URL?');">Delete</a>
+            </div>
+
+            <!-- Privacy Policy Section -->
+            <h3 class="mt-4">Privacy Policy</h3>
+            <p><strong>Last Updated:</strong> {{ site.privacy_policy_last_updated|date:"j F, Y"|default:"Not available" }}</p>
+            <p><strong>Last Checked:</strong> {{ site.last_checked|date:"j F, Y"|default:"Not available" }}</p>
+            <button class="btn btn-info mt-2" id="toggle-extracted-pp">View Extracted Data</button>
+            <div id="privacy-extracted" style="display: none;" class="mt-2">
+                <p>{{ site.privacy_policy_extracted|default:"No data available" }}</p>
+            </div>
+            <button class="btn btn-info mt-2" id="toggle-summary-pp">View Summary</button>
+            <div id="privacy-summary" style="display: none;" class="mt-2">
+                <p>{{ site.privacy_policy_summary|default:"No summary available" }}</p>
+            </div>
+
+            <!-- Terms of Service Section -->
+            <h3 class="mt-4">Terms of Service</h3>
+            <p><strong>Last Updated:</strong> {{ site.terms_of_service_last_updated|date:"j F, Y"|default:"Not available" }}</p>
+            <p><strong>Last Checked:</strong> {{ site.last_checked|date:"j F, Y"|default:"Not available" }}</p>
+            <button class="btn btn-info mt-2" id="toggle-extracted-tos">View Extracted Data</button>
+            <div id="tos-extracted" style="display: none;" class="mt-2">
+                <p>{{ site.terms_of_service_extracted|default:"No data available" }}</p>
+            </div>
+            <button class="btn btn-info mt-2" id="toggle-summary-tos">View Summary</button>
+            <div id="tos-summary" style="display: none;" class="mt-2">
+                <p>{{ site.terms_of_service_summary|default:"No summary available" }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add JavaScript to toggle visibility -->
+<script>
+    document.getElementById('toggle-extracted-pp').addEventListener('click', function() {
+        let section = document.getElementById('privacy-extracted');
+        section.style.display = section.style.display === 'none' ? 'block' : 'none';
+    });
+    document.getElementById('toggle-summary-pp').addEventListener('click', function() {
+        let section = document.getElementById('privacy-summary');
+        section.style.display = section.style.display === 'none' ? 'block' : 'none';
+    });
+    document.getElementById('toggle-extracted-tos').addEventListener('click', function() {
+        let section = document.getElementById('tos-extracted');
+        section.style.display = section.style.display === 'none' ? 'block' : 'none';
+    });
+    document.getElementById('toggle-summary-tos').addEventListener('click', function() {
+        let section = document.getElementById('tos-summary');
+        section.style.display = section.style.display === 'none' ? 'block' : 'none';
+    });
+</script>
+{% endblock %}

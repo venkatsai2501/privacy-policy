@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tracked Sites</title>
+</head>
+<body>
+    <h1>Your Tracked Sites</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>URL</th>
+                <th>Last Checked</th>
+                <th>Last Updated</th>
+                <th>Summary</th>
+                <th>Similarity Score</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for site in tracked_sites %}
+            <tr>
+                <td>{{ site.url }}</td>
+                <td>{{ site.last_checked }}</td>
+                <td>{{ site.last_updated }}</td>
+                <td>{{ site.summary }}</td>
+                <td>{{ site.similarity_score }}</td>
+                <td><a href="{% url 'track_details' site.id %}">View History</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

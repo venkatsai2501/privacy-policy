@@ -1,0 +1,33 @@
+<!-- track_changes.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Changes - {{ site.url }}</title>
+</head>
+<body>
+    <h1>Tracking History for {{ site.url }}</h1>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Last Checked</th>
+                <th>Last Updated</th>
+                <th>Summary</th>
+                <th>Similarity Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for history in history %}
+                <tr>
+                    <td>{{ history.date_checked }}</td>
+                    <td>{{ history.last_updated }}</td>
+                    <td>{{ history.summary }}</td>
+                    <td>{{ history.similarity_score }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
