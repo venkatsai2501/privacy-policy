@@ -1,0 +1,20 @@
+<!-- templates/tracked_site_detail.html -->
+
+{% extends 'base_generic.html' %}
+
+{% block content %}
+  <h2>Privacy Policy History for {{ tracked_site.url }}</h2>
+
+  <ul>
+    {% for history in policy_histories %}
+      <li>
+        <p><strong>Policy Date:</strong> {{ history.date_extracted }}</p>
+        <p><strong>Filename:</strong> {{ history.filename }}</p>
+        <a href="{% url 'download_policy' history.id %}">Download Policy</a>  <!-- Optional: Add link to download policy file -->
+        <p>{{ history.privacy_policy_text|slice:":500" }}...</p>  <!-- Show first 500 chars of the policy text -->
+      </li>
+    {% empty %}
+      <li>No privacy policy history found.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

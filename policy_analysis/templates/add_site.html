@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Site - Policy Tracker</title>
+    {% load static %}
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <style>
+        /* General Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        /* Centered Form Container */
+        .form-container {
+            max-width: 600px;
+            margin: 100px auto;
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        /* Heading */
+        h2 {
+            color: #686869;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        /* Input Fields */
+        .form-control {
+            border-radius: 8px;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Buttons */
+        .btn-primary, .btn-secondary {
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        /* Autocomplete Suggestions */
+        .suggestions {
+            position: absolute;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 100%;
+            max-height: 150px;
+            overflow-y: auto;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            z-index: 999;
+        }
+
+        .suggestion-item {
+            padding: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.2s ease-in-out;
+        }
+
+        .suggestion-item:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
+        /* Back to Dashboard */
+        .back-to-dashboard {
+            display: inline-block;
+            margin-top: 1rem;
+            font-weight: bold;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .back-to-dashboard:hover {
+            text-decoration: underline;
+        }
+
+        /* Fade In Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'dashboard' %}">Policy Tracker</a>
+            <div class="ms-auto">
+                <a href="{% url 'dashboard' %}" class="btn btn-outline-light me-2">Dashboard</a>
+                <a href="{% url 'logout' %}" class="btn btn-outline-light me-2">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Form Container -->
+    <div class="form-container">
+        <h2>Add a New Site to Track</h2>
+        
+        <!-- Autocomplete Search -->
+        <div style="position: relative;">
+            <input type="text" id="search" class="form-control" placeholder="Search for a company..." autocomplete="off">
+            <div id="suggestions" class="suggestions" style="display: none;"></div>
+        </div>
+
+        <!-- Add URL Form -->
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="hidden" name="logourl"> <!-- Hidden input for logo URL -->
+            <button type="submit" class="btn btn-primary" style="background-color: #767976; color: white; border: none;">Add Site</button>
+        </form>
+
+        <a href="{% url 'dashboard' %}" class="btn btn-primary my-2" style="background-color: #767976; color: white; border: none;"> Back to Dashboard</a>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        // Autocomplete functionality
+        $(document).ready(function () {
+            $('#search').on('input', function () {
+                const query = $(this).val();
+                if (query.length > 2) {
+                    $.ajax({
+                        url: "{% url 'search_company' %}", // Update URL to your endpoint
+                        data: { q: query },
+                        success: function (data) {
+                            let suggestions = '';
+                            data.forEach(company => {
+                                suggestions += `
+                                    <div class="suggestion-item" 
+                                        data-title="${company.name}" 
+                                        data-url="${company.domain}" 
+                                        data-logo="${company.logo}">
+                                        ${company.name} (${company.domain})
+                                    </div>`;
+                            });
+                            $('#suggestions').html(suggestions).show();
+                        }
+                    });
+                } else {
+                    $('#suggestions').hide();
+                }
+            });
+
+            $('#suggestions').on('click', '.suggestion-item', function () {
+                const title = $(this).data('title');
+                const url = $(this).data('url');
+                const logo = $(this).data('logo');
+
+                $('input[name="url"]').val(`https://${url}`);
+                $('input[name="title"]').val(title);
+                $('input[name="logourl"]').val(logo);
+                $('#search').val(title);
+                $('#suggestions').hide();
+            });
+
+            $(document).click(function (e) {
+                if (!$(e.target).closest('#suggestions, #search').length) {
+                    $('#suggestions').hide();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
