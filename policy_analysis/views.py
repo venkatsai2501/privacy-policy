@@ -24,6 +24,8 @@ import openai
 from django.utils.timezone import now
 from django.db import transaction
 import os
+from selenium import webdriver
+
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -345,9 +347,12 @@ def scan_url_view(request, site_id):
     # Get the URL from the selected TrackedSite instance
     url = site.url
 
-    # Selenium Web scraping to extract text
-    service = Service(ChromeDriverManager().install())
-    driver = webdriver.Chrome(service=service)
+    service = Service('/usr/bin/chromedriver')
+    options = webdriver.ChromeOptions()
+    options.add_argument('--headless')  # Run in headless mode (no GUI)
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+    driver = webdriver.Chrome(service=service, options=options)
     
     try:
         # Extract Privacy Policy
